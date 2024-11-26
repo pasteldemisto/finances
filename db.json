@@ -1,0 +1,30 @@
+{
+  "finances": [
+    {
+      "id": "1",
+      "name": "Salário",
+      "description": "Salário do mês",
+      "value": 5000.00
+    },
+    {
+      "id": "2",
+      "name": "Freelance",
+      "description": "Projeto de desenvolvimento",
+      "value": 1200.50
+    }
+  ],
+  "expenses": [
+    {
+      "id": "1",
+      "name": "Aluguel",
+      "description": "Pagamento mensal do aluguel",
+      "value": 1500.00
+    },
+    {
+      "id": "2",
+      "name": "Supermercado",
+      "description": "Compras do mês",
+      "value": 450.75
+    }
+  ]
+}
