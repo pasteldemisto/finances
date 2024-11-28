@@ -13,3 +13,8 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# instalando json-server acaba criando
+# o diretório node_modules
+# não há necessidade de enviá-lo
+node_modules/

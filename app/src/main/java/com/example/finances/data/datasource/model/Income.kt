@@ -1,8 +1,8 @@
 package com.example.finances.data.datasource.model
 
 data class Income (
-    val id: String,
-    val name: String,
-    val description: String,
-    val value: Double,
-)
+    override val id: String,
+    override val name: String,
+    override val description: String,
+    override val value: Double,
+) : Transaction()

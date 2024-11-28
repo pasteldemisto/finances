@@ -9,7 +9,7 @@ object RetrofitUtil {
 
     fun getIncomeService(): IncomeApiService {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://10.0.2.2:3000/")
+            .baseUrl("http://10.0.2.2:3000/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         return retrofit.create(IncomeApiService::class.java)
@@ -17,7 +17,7 @@ object RetrofitUtil {
 
     fun getExpenseService(): ExpenseApiService {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://10.0.2.2:3000/")
+            .baseUrl("http://10.0.2.2:3000/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         return retrofit.create(ExpenseApiService::class.java)

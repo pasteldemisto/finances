@@ -12,18 +12,18 @@ import retrofit2.http.Path
 
 interface IncomeApiService {
 
-    @GET("/finances")
+    @GET("/incomes")
     suspend fun getIncomes(): Response<List<Income>>
 
-    @GET("/finances/{id}")
+    @GET("/incomes/{id}")
     suspend fun getIncomeById(@Path("id") id:String): Response<Income>
 
-    @POST("/finances")
+    @POST("/incomes")
     suspend fun createIncome(@Body income: Income): ResponseBody
 
-    @DELETE("/finances/{id}")
+    @DELETE("/incomes/{id}")
     suspend fun deleteIncome(@Path("id") id: String): ResponseBody
 
-    @PUT("/finances/{id}")
+    @PUT("/incomes/{id}")
     suspend fun updateIncome(@Path("id") id: String, @Body income: Income): ResponseBody
 }

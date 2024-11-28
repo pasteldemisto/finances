@@ -13,19 +13,19 @@ import retrofit2.http.Path
 
 interface ExpenseApiService {
 
-    @GET("/finances")
+    @GET("/expenses")
     suspend fun getExpenses(): Response<List<Expense>>
 
-    @GET("/finances/{id}")
+    @GET("/expenses/{id}")
     suspend fun getExpenseById(@Path("id") id:String): Response<Expense>
 
-    @POST("/finances")
+    @POST("/expenses")
     suspend fun createExpense(@Body expense: Expense): ResponseBody
 
-    @DELETE("/finances/{id}")
+    @DELETE("/expenses/{id}")
     suspend fun deleteExpense(@Path("id") id: String): ResponseBody
 
-    @PUT("/finances/{id}")
+    @PUT("/expenses/{id}")
     suspend fun updateExpense(@Path("id") id: String, @Body expense: Expense): ResponseBody
 
 }
