@@ -38,7 +38,9 @@ import kotlin.random.Random
 @Composable
 fun HomeScreen(incomeDataSource: IncomeDataSource, expenseDataSource: ExpenseDataSource) {
 
-    var showAddDialog by remember { mutableStateOf(false) }
+    var showAddIncomeDialog by remember { mutableStateOf(false) }
+    var showAddExpenseDialog by remember { mutableStateOf(false) }
+
     var showEditDialog by remember { mutableStateOf(false) }
 
     var incomeList by remember { mutableStateOf<List<Income>>(emptyList()) }
@@ -126,16 +128,16 @@ fun HomeScreen(incomeDataSource: IncomeDataSource, expenseDataSource: ExpenseDat
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
-                Button(onClick = { showAddDialog = true }) {
+                Button(onClick = { showAddIncomeDialog = true }) {
                     Text(text = "Adicionar Entrada")
                 }
-                Button(onClick = { }) {
+                Button(onClick = { showAddExpenseDialog = true }) {
                     Text(text = "Adicionar Saída")
                 }
             }
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Display the list of incomes
+
             val scrollState = rememberScrollState()
             Column(
                 modifier = Modifier
@@ -254,24 +256,44 @@ fun HomeScreen(incomeDataSource: IncomeDataSource, expenseDataSource: ExpenseDat
                 )
             }
 
-            if (showAddDialog) {
+            if (showAddIncomeDialog) {
                 AddIncomeDialog(
-                    onDismiss = { showAddDialog = false },
+                    onDismiss = { showAddIncomeDialog = false },
                     onSave = { addedTransaction ->
                         coroutineScope.launch {
                             try {
                                 if (addedTransaction is Income) {
                                     incomeDataSource.createIncome(addedTransaction)
-                                } else if (addedTransaction is Expense) {
+                                }
+                                combinedList = updateCombinedList(incomeDataSource, expenseDataSource)
+                                updateTotals()
+                                println("transação adicionada com sucesso!")
+                            } catch (e: Exception) {
+                                println("erro ao adicionar a transação: ${e.message}")
+                            } finally {
+                                showAddIncomeDialog = false
+                            }
+                        }
+                    }
+                )
+            }
+
+            if (showAddExpenseDialog) {
+                AddExpenseDialog(
+                    onDismiss = { showAddExpenseDialog = false },
+                    onSave = { addedTransaction ->
+                        coroutineScope.launch {
+                            try {
+                                if (addedTransaction is Expense) {
                                     expenseDataSource.createExpense(addedTransaction)
                                 }
                                 combinedList = updateCombinedList(incomeDataSource, expenseDataSource)
                                 updateTotals()
                                 println("transação adicionada com sucesso!")
                             } catch (e: Exception) {
-                                println("erro ao atualizar transação: ${e.message}")
+                                println("erro ao adicionar a transação: ${e.message}")
                             } finally {
-                                showAddDialog = false
+                                showAddIncomeDialog = false
                             }
                         }
                     }
@@ -324,6 +346,60 @@ fun AddIncomeDialog(
                 )
 
                 onSave(income)
+                onDismiss()
+            }) {
+                Text("Salvar")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = { onDismiss() }) {
+                Text("Cancelar")
+            }
+        }
+    )
+}
+
+@Composable
+fun AddExpenseDialog(
+    onDismiss: () -> Unit,
+    onSave: (Transaction) -> Unit
+) {
+    var name by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+    var value by remember { mutableStateOf("") }
+
+    AlertDialog(
+        onDismissRequest = { onDismiss() },
+        title = { Text("Adicionar Saída") },
+        text = {
+            Column {
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    label = { Text("Nome") }
+                )
+                OutlinedTextField(
+                    value = description,
+                    onValueChange = { description = it },
+                    label = { Text("Descrição") }
+                )
+                OutlinedTextField(
+                    value = value,
+                    onValueChange = { value = it },
+                    label = { Text("Valor") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+            }
+        },
+        confirmButton = {
+            Button(onClick = {
+                val expense = Expense(
+                    id = Random.nextInt(0, 1001).toString(),
+                    value = value.toDouble(),
+                    name = name,
+                    description = description
+                )
+                onSave(expense)
                 onDismiss()
             }) {
                 Text("Salvar")
