@@ -9,6 +9,8 @@ import com.example.finances.ui.screens.HomeScreen
 import com.example.finances.ui.screens.LoginScreen
 import com.example.finances.data.datasource.ExpenseDataSource
 import com.example.finances.data.datasource.IncomeDataSource
+import com.example.finances.ui.screens.SignupScreen
+import com.example.finances.ui.screens.StatisticsScreen
 
 @Composable
 fun MainNavHost() {
@@ -18,16 +20,36 @@ fun MainNavHost() {
     val incomeDataSource = IncomeDataSource(apiIncomeService)
     val expenseDataSource = ExpenseDataSource(apiExpenseService)
 
-    NavHost(navController = navController, startDestination = "home") {
+    NavHost(navController = navController, startDestination = "login") {
         composable("login") {
-            LoginScreen(onLoginSuccess = {
+            LoginScreen(
+                onLoginSuccess = {
+                    navController.navigate("home") {
+                        popUpTo("login") { inclusive = true }
+                    }
+                },
+                onSignupClick = {
+                    navController.navigate("signup")
+                })
+        }
+        composable("signup") {
+            SignupScreen(onSignupSuccess = {
                 navController.navigate("home") {
                     popUpTo("login") { inclusive = true }
                 }
             })
         }
         composable("home") {
-            HomeScreen(incomeDataSource, expenseDataSource)
+            HomeScreen(
+                incomeDataSource,
+                expenseDataSource,
+                onStatisticsClick = {
+                    navController.navigate("statistics")
+                }
+            )
+        }
+        composable("statistics") {
+            StatisticsScreen(incomeDataSource, expenseDataSource, navController)
         }
     }
 }

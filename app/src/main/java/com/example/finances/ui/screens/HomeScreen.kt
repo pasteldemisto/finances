@@ -36,7 +36,11 @@ import kotlin.random.Random
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HomeScreen(incomeDataSource: IncomeDataSource, expenseDataSource: ExpenseDataSource) {
+fun HomeScreen(
+    incomeDataSource: IncomeDataSource,
+    expenseDataSource: ExpenseDataSource,
+    onStatisticsClick: () -> Unit
+) {
 
     var showAddIncomeDialog by remember { mutableStateOf(false) }
     var showAddExpenseDialog by remember { mutableStateOf(false) }
@@ -123,7 +127,22 @@ fun HomeScreen(incomeDataSource: IncomeDataSource, expenseDataSource: ExpenseDat
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Button(
+                    onClick = { onStatisticsClick() },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                        contentColor = MaterialTheme.colorScheme.onTertiary
+                    )
+                ) {
+                    Text(text = "Ver estatísticas")
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -135,7 +154,7 @@ fun HomeScreen(incomeDataSource: IncomeDataSource, expenseDataSource: ExpenseDat
                     Text(text = "Adicionar Saída")
                 }
             }
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
 
             val scrollState = rememberScrollState()

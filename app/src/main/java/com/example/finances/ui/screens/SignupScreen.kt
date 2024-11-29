@@ -11,7 +11,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LoginScreen(onLoginSuccess: () -> Unit, onSignupClick: () -> Unit) {
+fun SignupScreen(onSignupSuccess: () -> Unit) {
+    var name by remember { mutableStateOf(TextFieldValue("")) }
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
 
@@ -22,8 +23,14 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onSignupClick: () -> Unit) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Login", style = MaterialTheme.typography.titleLarge)
+        Text(text = "Cadastre-se aqui", style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.height(16.dp))
+        TextField(
+            value = name,
+            onValueChange = { name = it },
+            label = { Text("Nome") }
+        )
+        Spacer(modifier = Modifier.height(8.dp))
         TextField(
             value = email,
             onValueChange = { email = it },
@@ -37,18 +44,25 @@ fun LoginScreen(onLoginSuccess: () -> Unit, onSignupClick: () -> Unit) {
             visualTransformation = PasswordVisualTransformation()
         )
         Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = {
+                if (email.text == "aluno@unifor.br" && password.text == "1234") {
+                    onSignupSuccess()
+                }
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.secondary,
+                contentColor = MaterialTheme.colorScheme.onSecondary
+            )
+        ) {
+            Text("Cadastrar")
+        }
         Button(onClick = {
-            if (email.text == "aluno@unifor.br" && password.text == "1234") {
-                onLoginSuccess()
-            }
+//            if (email.text == "aluno@unifor.br" && password.text == "1234") {
+                onSignupSuccess()
+//            }
         }) {
-            Text("Entrar")
+            Text("Voltar")
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = onSignupClick) {
-            Text("Registrar")
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Text("Use aluno@unifor.br e senha 1234 para autenticar")
     }
 }
